@@ -1,8 +1,14 @@
+import { dashboard } from './dashboard.js';
+
 export var home = {
 
+    components: {
+        'dashboard': dashboard,
+    },
+
     watch: {
-        subject_property_data(dict) {
-            if (Object.keys(dict).length) {
+        analysisParams(dict) {
+            if (Object.keys(dict).length > 2) {
                 this.disabled = null;
             }
             else {
@@ -13,7 +19,14 @@ export var home = {
 
     data() {
         return {
-            subject_property_data: {},
+            analysisParams: {
+                rental_income: 600,
+                percent_down: 25,
+                interest_rate: 6,
+                vacancy_rate: 5,
+            },
+            subjectPropertyData: {},
+            analysisDetails: {},
             disabled: true,
         };
     },
@@ -30,7 +43,12 @@ export var home = {
                 },
                 responseType: "json",
             }).then(response => {
-                this.subject_property_data = response.data;
+                this.subjectPropertyData = response.data;
+                this.analysisParams['purchase_price'] = this.subjectPropertyData['List Price'];
+                this.analysisParams = {
+                    ...this.analysisParams,
+                    ...response.data
+                };
             }).catch(error => {
                 console.log(error);
             })
@@ -38,16 +56,26 @@ export var home = {
         },
 
         analyzeProperty() {
+
+            let params = {'analysisVariables': this.analysisVariables, 'subjectPropertyData': this.subjectPropertyData};
+            console.log(params)
+
             axios({
                 method: "get",
                 url: "/analyzeProperty",
-                params: this.subject_property_data,
+                params: this.analysisParams,
                 responseType: "json",
             }).then(response => {
-                console.log(response.data);
+                this.analysisDetails = response.data;
             }).catch(error => {
                 console.log(error);
             })
+
+        },
+
+        updateCalc(data) {
+            this.analysisParams = data.newAnalysisParams;
+            this.analyzeProperty();
 
         }
 
@@ -76,7 +104,7 @@ export var home = {
                     <input type="file" accept=".csv" multiple="false" @change="handleFileUpload" />
                 </div>
                 <div class="col">
-                    <div v-for="(value, key) in subject_property_data" :key="key">
+                    <div v-for="(value, key) in subjectPropertyData" :key="key">
                         <p><strong>{{ key }}</strong>: {{ value }}</p>
                     </div>
                 </div>
@@ -91,6 +119,10 @@ export var home = {
             </div>
             <br />
             <br />
+            <dashboard v-if="Object.keys(analysisDetails).length > 0"
+                :analysisParams="analysisParams"
+                :analysisDetails="analysisDetails"
+                @update-calc="updateCalc"></dashboard>
         </div>
     `
 }

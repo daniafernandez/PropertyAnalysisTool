@@ -16,11 +16,13 @@ const base = {
 
 import { home } from './home.js';
 import { error } from './error.js';
+import { dashboard } from './dashboard.js';
 
 
 const routes = [
     {path: '/', component: home},
-    {path: '/error', component: error}
+    {path: '/error', component: error},
+    {path: '/dashboard', component: dashboard}
 ]
 
 const router = VueRouter.createRouter({

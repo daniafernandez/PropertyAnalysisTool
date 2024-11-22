@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify
+from collections import OrderedDict
 import pandas as pd
 from io import BytesIO
 
@@ -16,6 +17,7 @@ def upload_file():
         elif df.shape[0] < 1:
             return jsonify({"error": "The CSV provided is empty. Please provide a csv with the subject property's information"}), 400
         else:
+            df = df.fillna('N/A')
             subject_prop_dict = df.iloc[0].to_dict()
             return jsonify(subject_prop_dict), 200
     else:
