@@ -23,7 +23,6 @@ export var dashboard = {
 
     data() {
         return {
-            rentalIncomeBarChart: null,
 
         };
     },
@@ -32,11 +31,22 @@ export var dashboard = {
       'analysisParams.rental_income'(newValue) {
         this.rentalIncomeChart.data.datasets[0].data = [newValue];
         this.rentalIncomeChart.update();
+      },
+
+      'analysisParams.capex_percent'(newValue) {
+        this.expensesChart.data.datasets[1].data = [newValue/100 * this.analysisDetails['rental_income']];
+        this.expensesChart.update();
+      },
+
+      'analysisParams.vacancy_rate'(newValue) {
+        this.expensesChart.data.datasets[0].data = [newValue/100 * this.analysisDetails['rental_income']];
+        this.expensesChart.update();
       }
     },
 
     mounted() {
-        this.setupRentalIncomeChart(); // Initialize the chart when the component mounts
+        this.setupRentalIncomeChart();
+        this.setupExpensesChart();
     },
 
     methods: {
@@ -61,6 +71,64 @@ export var dashboard = {
             })
         },
 
+        setupExpensesChart() {
+            const expenseCategories = [
+                { label: 'Vacancy Reserves', value: this.analysisDetails.vacancy_reserve, color: '#C43240' },
+                { label: 'CapEx', value: this.analysisDetails.capex, color: '#73B7B8' },
+                { label: 'Insurance', value: this.analysisDetails.insurance, color: '#445E93' },
+                { label: 'Utilities', value: this.analysisDetails.utilities, color: '#fad02c' },
+                { label: 'HOA', value: this.analysisDetails.HOA, color: '#F68C70' },
+                { label: 'Lawn/Snow Care', value: this.analysisDetails.lawn_snow_care, color: '#2B6A4D' },
+                { label: 'Mortgage', value: this.analysisDetails.monthly_mortgage_payment, color: '#b32478' }
+            ];
+
+            const ctx = this.$refs.expensesChart.getContext('2d');
+            this.expensesChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: [''], // Assuming one address, can add more for multiple bars
+                    datasets: expenseCategories.map(category => ({
+                        label: category.label,
+                        data: [category.value], // Single data point per category
+                        backgroundColor: category.color, // Use random or predefined colors
+                    }))
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                          display: false,
+                          position: 'top',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: context => {
+                                    const value = context.raw;
+                                    return `${context.dataset.label}: $${value.toLocaleString()}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            stacked: true,
+                        },
+                        y: {
+                            stacked: true,
+                            min: 0,
+                            max: 3000, // Set fixed maximum value for Y-axis
+                            grid: {
+                               display: false, // Hides the grid lines on the Y axis
+                            },
+                            ticks: {
+                                callback: value => `$${value.toLocaleString()}` // Format Y-axis labels as currency
+                            }
+                        }
+                    }
+                }
+            });
+        },
+
         setupRentalIncomeChart() {
           const ctx = this.$refs.rentalIncomeChart.getContext('2d');
 
@@ -72,8 +140,8 @@ export var dashboard = {
                 {
                   label: 'Rental Income', // Label for the legend
                   data: [this.analysisParams['rental_income']], // Chart data
-                  backgroundColor: '#85aeff', // Bar color
-                  borderColor: '#85aeff', // Bar border
+                  backgroundColor: '#437b17', // Bar color
+                  borderColor: '#437b17', // Bar border
                   borderWidth: 1,
                 },
               ],
@@ -90,7 +158,7 @@ export var dashboard = {
                 y: {
                   beginAtZero: true,
                   min: 0,
-                  max: 8000, // Set fixed maximum value for Y-axis
+                  max: 3000, // Set fixed maximum value for Y-axis
                   grid: {
                     display: false, // Hides the grid lines on the Y axis
                   },
@@ -140,29 +208,29 @@ export var dashboard = {
               <br />
               <div class="row">
                 <div class="col">
-                    <br />
                     <h3>Income</h3>
                     <br />
-                    <canvas ref="rentalIncomeChart" style="max-width: 500px;"></canvas>
+                    <canvas ref="rentalIncomeChart" style="max-width: 350px; height: 400px;"></canvas>
                     <br />
                     <h6>Rental Income: <strong>{{ '$' + this.analysisDetails['rental_income'].toLocaleString() + '/mo' }}</strong></h6>
                     <range_slider :modelValue="this.analysisDetails['rental_income']"
                         @update:modelValue="value => updateParams(value, 'rentalIncome')"
                         min='500'
-                        max='8000'></range_slider>
+                        max='3000'></range_slider>
                 </div>
                 <div class="col">
                     <div class="center-content">
                         <h3>Expenses</h3>
                         <br />
-                        <h5>Mortgage Payment</h5>
+                        <canvas ref="expensesChart" style="max-width: 350px; height: 400px;"></canvas>
+                        <!-- <h5>Mortgage Payment</h5>
                         <h4><strong>{{ '$' + this.analysisDetails['monthly_mortgage_payment'].toLocaleString() }}</strong></h4>
                         <br />
                         <h6>CapEx</h6>
                         <h5><strong>{{ '$' + this.analysisDetails['capex'].toLocaleString() }}</strong></h5>
                         <br />
                         <h6>Vacancy Reserve</h6>
-                        <h5><strong>{{ '$' + this.analysisDetails['vacancy_reserve'].toLocaleString() }}</strong></h5>
+                        <h5><strong>{{ '$' + this.analysisDetails['vacancy_reserve'].toLocaleString() }}</strong></h5>-->
                     </div>
                     <br />
                     <h6>CapEx Percent: <strong>{{ this.analysisDetails['capex_percent'] }}</strong>%</h6>
@@ -182,6 +250,9 @@ export var dashboard = {
                     <div class="center-content">
                         <img src="static/images/loan.png" style="width: 200px;"/>
                         <h3>Loan Details</h3>
+                        <br />
+                        <h5>Mortgage Payment</h5>
+                        <h4><strong>{{ '$' + this.analysisDetails['monthly_mortgage_payment'].toLocaleString() }}</strong></h4>
                         <br />
                         <h6>Loan Amount</h6>
                         <h5><strong>{{ '$' + this.analysisDetails['loan_amount'].toLocaleString() }}</strong></h5>
