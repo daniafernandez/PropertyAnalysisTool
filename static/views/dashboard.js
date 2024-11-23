@@ -8,7 +8,7 @@ export var dashboard = {
 
     props: {
         analysisParams: {type: Object},
-        analysisDetails: {type: Object}
+        analysisDetails: {type: Object},
     },
 
     computed: {
@@ -23,11 +23,21 @@ export var dashboard = {
 
     data() {
         return {
-            rentalIncome: this.analysisDetails['rental_income'],
-            purchasePrice: this.analysisDetails['purchase_price']
+            rentalIncomeBarChart: null,
 
         };
-      },
+    },
+
+    watch: {
+      'analysisParams.rental_income'(newValue) {
+        this.rentalIncomeChart.data.datasets[0].data = [newValue];
+        this.rentalIncomeChart.update();
+      }
+    },
+
+    mounted() {
+        this.setupRentalIncomeChart(); // Initialize the chart when the component mounts
+    },
 
     methods: {
         updateParams(newValue, variable) {
@@ -40,14 +50,68 @@ export var dashboard = {
             else if (variable == 'interestRate') {
                 this.analysisParams['interest_rate'] = newValue
             }
-            else if (variable == 'vacancyRate') [
+            else if (variable == 'vacancyRate') {
                 this.analysisParams['vacancy_rate'] = newValue
-            ]
+            }
+            else if (variable == 'capexPercent') {
+                this.analysisParams['capex_percent'] = newValue
+            }
             this.$emit("update-calc", {
                 newAnalysisParams: this.analysisParams
             })
+        },
+
+        setupRentalIncomeChart() {
+          const ctx = this.$refs.rentalIncomeChart.getContext('2d');
+
+          this.rentalIncomeChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: [''], // X-axis labels
+              datasets: [
+                {
+                  label: 'Rental Income', // Label for the legend
+                  data: [this.analysisParams['rental_income']], // Chart data
+                  backgroundColor: '#85aeff', // Bar color
+                  borderColor: '#85aeff', // Bar border
+                  borderWidth: 1,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              plugins: {
+                legend: {
+                  display: false,
+                  position: 'top',
+                },
+              },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  min: 0,
+                  max: 8000, // Set fixed maximum value for Y-axis
+                  grid: {
+                    display: false, // Hides the grid lines on the Y axis
+                  },
+                  ticks: {
+                    callback: function(value) {
+                      return `$${value.toLocaleString()}`; // Add dollar sign to Y-axis labels
+                    },
+                  },
+                },
+                x: {
+                  title: {
+                    display: false,
+                    text: 'Income Source', // Optional X-axis title
+                  },
+                },
+              },
+            },
+          });
         }
-    },
+
+            },
 
     template: `
         <div>
@@ -76,6 +140,11 @@ export var dashboard = {
               <br />
               <div class="row">
                 <div class="col">
+                    <br />
+                    <h3>Income</h3>
+                    <br />
+                    <canvas ref="rentalIncomeChart" style="max-width: 500px;"></canvas>
+                    <br />
                     <h6>Rental Income: <strong>{{ '$' + this.analysisDetails['rental_income'].toLocaleString() + '/mo' }}</strong></h6>
                     <range_slider :modelValue="this.analysisDetails['rental_income']"
                         @update:modelValue="value => updateParams(value, 'rentalIncome')"
@@ -89,9 +158,18 @@ export var dashboard = {
                         <h5>Mortgage Payment</h5>
                         <h4><strong>{{ '$' + this.analysisDetails['monthly_mortgage_payment'].toLocaleString() }}</strong></h4>
                         <br />
+                        <h6>CapEx</h6>
+                        <h5><strong>{{ '$' + this.analysisDetails['capex'].toLocaleString() }}</strong></h5>
+                        <br />
                         <h6>Vacancy Reserve</h6>
                         <h5><strong>{{ '$' + this.analysisDetails['vacancy_reserve'].toLocaleString() }}</strong></h5>
                     </div>
+                    <br />
+                    <h6>CapEx Percent: <strong>{{ this.analysisDetails['capex_percent'] }}</strong>%</h6>
+                    <range_slider :modelValue="this.analysisDetails['capex_percent']"
+                        @update:modelValue="value => updateParams(value, 'capexPercent')"
+                        min='5'
+                        max='10'></range_slider>
                     <br />
                     <h6>Vacancy Rate: <strong>{{ this.analysisDetails['vacancy_rate'] }}</strong>%</h6>
                     <range_slider :modelValue="this.analysisDetails['vacancy_rate']"
@@ -125,22 +203,6 @@ export var dashboard = {
                         @update:modelValue="value => updateParams(value, 'interestRate')"
                         min='0'
                         max='10'></range_slider>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col">
-                    <h2>PARAMS</h2>
-                    <p>{{ this.analysisParams }}</p>
-                </div>
-                <div class="col">
-                    <h2>DETAILS</h2>
-                    <p>{{ this.analysisDetails }}</p>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col">
-                    <p>hello</p>
-                    <p>{{ this.purchasePrice }}</p>
                 </div>
               </div>
             </div>

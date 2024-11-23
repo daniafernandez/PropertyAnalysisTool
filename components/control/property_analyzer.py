@@ -34,7 +34,8 @@ def analyze_property():
     lawn_snow_care = 20
     vacancy_rate = float(analysis_params['vacancy_rate'])  # starting default
     vacancy_rate_dec = vacancy_rate/100
-    capex = 100
+    capex_percent = float(analysis_params['capex_percent'])
+    capex = capex_percent/100 * rental_income
 
     monthly_rate = interest_rate_dec/12
     total_payments = term_yrs * 12
@@ -68,7 +69,8 @@ def analyze_property():
         "lawn_snow_care": lawn_snow_care,
         "vacancy_rate": vacancy_rate,
         "vacancy_reserve": vacancy_reserve,
-        "capex": capex,
+        "capex_percent": capex_percent,
+        "capex": round(capex, 2),
 
         "rental_income": rental_income,
         "monthly_mortgage_payment": round(monthly_mortgage_payment, 2),

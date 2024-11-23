@@ -20,10 +20,11 @@ export var home = {
     data() {
         return {
             analysisParams: {
-                rental_income: 600,
+                rental_income: 2000,
                 percent_down: 25,
                 interest_rate: 6,
                 vacancy_rate: 5,
+                capex_percent: 7,
             },
             subjectPropertyData: {},
             analysisDetails: {},
