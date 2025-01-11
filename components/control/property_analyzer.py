@@ -14,11 +14,12 @@ def analyze_property():
     rental_income = int(analysis_params['rental_income'])
 
     # closing and mortgage
+    list_price = int(analysis_params['List Price'])
     purchase_price = int(round(float(analysis_params['purchase_price']), 0))
     percent_down = float(analysis_params['percent_down'])    # starting default
     percent_down_decimal = percent_down / 100
     closing_costs = 12000   # starting default
-    rehab_budget = 10000   # starting default
+    rehab_budget = int(analysis_params['rehab_budget'])
     interest_rate = analysis_params['interest_rate']    # starting default
     interest_rate_dec = int(interest_rate)/100
     term_yrs = 30   # starting default
@@ -58,11 +59,13 @@ def analyze_property():
 
     analysis_details = {
         "address_title": address_title,
+        "list_price": list_price,
         "purchase_price": purchase_price,
         "percent_down": percent_down,
         "closing_costs": closing_costs,
         "interest_rate": interest_rate,
         "tax_annual": tax_annual,
+        "tax_monthly": tax_monthly,
         "insurance": insurance,
         "utilities": utilities,
         "HOA": HOA,
@@ -71,6 +74,7 @@ def analyze_property():
         "vacancy_reserve": vacancy_reserve,
         "capex_percent": capex_percent,
         "capex": round(capex, 2),
+        "rehab_budget": rehab_budget,
 
         "rental_income": rental_income,
         "monthly_mortgage_payment": round(monthly_mortgage_payment, 2),
