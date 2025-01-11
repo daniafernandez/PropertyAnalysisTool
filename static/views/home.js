@@ -22,6 +22,7 @@ export var home = {
             analysisParams: {
                 rental_income: 2000,
                 percent_down: 25,
+                rehab_budget: 10000,
                 interest_rate: 6,
                 vacancy_rate: 5,
                 capex_percent: 7,
@@ -85,7 +86,7 @@ export var home = {
         <div>
             <br />
             <br />
-            <div class="container" style="background-color: #cfd4c5; padding: 30px; border-radius: 20px;">
+            <div v-if="Object.keys(analysisDetails).length <= 0" class="container" style="background-color: #cfd4c5; padding: 30px; border-radius: 20px;">
               <div class="row">
                 <div class="col" style="padding: 30px; text-align: center;">
                     <h1>Rental Property Calculator</h1>
@@ -105,9 +106,10 @@ export var home = {
                     <input type="file" accept=".csv" multiple="false" @change="handleFileUpload" />
                 </div>
                 <div class="col">
-                    <div v-for="(value, key) in subjectPropertyData" :key="key">
+                    <!-- <div v-for="(value, key) in subjectPropertyData" :key="key">
                         <p><strong>{{ key }}</strong>: {{ value }}</p>
-                    </div>
+                    </div> -->
+
                 </div>
               </div>
               <div class="row">
@@ -118,8 +120,6 @@ export var home = {
                 </div>
               </div>
             </div>
-            <br />
-            <br />
             <dashboard v-if="Object.keys(analysisDetails).length > 0"
                 :analysisParams="analysisParams"
                 :analysisDetails="analysisDetails"

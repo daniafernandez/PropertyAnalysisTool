@@ -3,6 +3,7 @@ export var range_slider = {
     props: {
         min: {default: 500},
         max: {default: 10000},
+        step: {default: 1},
         units: {type: String, default: '$'},
         modelValue: {}
     },
@@ -15,7 +16,7 @@ export var range_slider = {
             id="rentalIncomeRange"
             :min="min"
             :max="max"
-            step="1">
+            :step="step">
 
     `
 
