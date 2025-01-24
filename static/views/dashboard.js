@@ -195,7 +195,7 @@ export var dashboard = {
 
     template: `
         <div>
-            <div class="container" style="background-color: #cfd4c5; padding: 30px; border-radius: 20px;">
+            <div class="container" style="background-color: #bbd0ff; padding: 30px; border-radius: 15px;">
               <div class="row">
                 <div class="col" style="padding: 30px; text-align: center;">
                     <h1>{{ analysisDetails["address_title"] }}</h1>
