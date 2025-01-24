@@ -203,15 +203,15 @@ export var dashboard = {
               </div>
               <br />
               <div class="row">
-                <div class="col" class="center-content">
+                <div class="col center-content">
                     <h5>Monthly Cashflow</h5>
                     <h3>{{ '$' + analysisDetails["monthly_cashflow"].toLocaleString() + '/mo' }}</h3>
                 </div>
-                <div class="col" class="center-content">
+                <div class="col center-content">
                     <h5>ROI</h5>
                     <h3>{{ analysisDetails["ROI"] }}</h3>
                 </div>
-                <div class="col" class="center-content">
+                <div class="col center-content">
                     <h5>CoC</h5>
                     <h3>{{ analysisDetails["CoC"] }}</h3>
                 </div>
@@ -266,7 +266,7 @@ export var dashboard = {
                         <h5><strong>{{ '$' + this.analysisDetails['cash_investment'].toLocaleString() }}</strong></h5>
                     <br />
                     </div>
-                    <p style="margin-top: -4px;"><i>List Price: <i><strong>{{ '$' + this.analysisDetails['list_price'].toLocaleString() }}</strong></i></p>
+                    <p style="margin-top: -4px;"><i>List Price: <strong>{{ '$' + this.analysisDetails['list_price'].toLocaleString() }}</strong></i></p>
                     <h6>Purchase Price: <strong>{{ '$' + this.analysisDetails['purchase_price'].toLocaleString() }}</strong></h6>
                     <range_slider :modelValue="this.analysisDetails['purchase_price']"
                         @update:modelValue="value => updateParams(value, 'purchasePrice')"
@@ -292,12 +292,12 @@ export var dashboard = {
                         max='100000'
                         step='100'></range_slider>
                     <div>
-                        <h6>Vacancy Reserves: {{ this.analysisDetails['vacancy_reserve'] }}<h6>
-                        <h6>CapEx: {{ this.analysisDetails['capex'] }}<h6>
-                        <h6>Taxes: {{ this.analysisDetails['tax_monthly'] }}<h6>
-                        <h6>Insurance: {{ this.analysisDetails['insurance'] }}<h6>
-                        <h6>Utilities: {{ this.analysisDetails['utilities'] }}<h6>
-                        <h6>HOA: {{ this.analysisDetails['HOA'] }}<h6>
+                        <h6>Vacancy Reserves: {{ this.analysisDetails['vacancy_reserve'] }}</h6>
+                        <h6>CapEx: {{ this.analysisDetails['capex'] }}</h6>
+                        <h6>Taxes: {{ this.analysisDetails['tax_monthly'] }}</h6>
+                        <h6>Insurance: {{ this.analysisDetails['insurance'] }}</h6>
+                        <h6>Utilities: {{ this.analysisDetails['utilities'] }}</h6>
+                        <h6>HOA: {{ this.analysisDetails['HOA'] }}</h6>
 
                     </div>
                 </div>
