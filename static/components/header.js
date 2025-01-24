@@ -8,8 +8,8 @@ export var header_nav = {
           </button>
           <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-              <a class="nav-item nav-link active" style="color: white;" href="#">Calculate<span class="sr-only"></span></a>
-              <a class="nav-item nav-link" style="color: white;" href="#">View Saved Reports</a>
+              <!-- <a class="nav-item nav-link active" style="color: white;" href="#">Calculate<span class="sr-only"></span></a>
+              <a class="nav-item nav-link" style="color: white;" href="#">View Saved Reports</a> -->
             </div>
           </div>
         </nav>
