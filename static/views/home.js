@@ -45,6 +45,8 @@ export var home = {
             subjectPropertyData: {},
             analysisDetails: {},
             disabled: true,
+            errorMessageCSVUpload: null,
+            errorMessageDemoFile: null,
         };
     },
 
@@ -67,7 +69,7 @@ export var home = {
                     ...response.data
                 };
             }).catch(error => {
-                console.log(error);
+                this.errorMessageCSVUpload = error.response.data.error;
             })
 
         },
@@ -115,8 +117,16 @@ export var home = {
                 };
                 this.demoFileNameDisplayed = this.subjectPropertyData['Address'];
             }).catch(error => {
-                console.log(error);
+                this.errorMessageDemoFile = error.response.data.error;
             })
+        },
+
+        closeAlertCSV() {
+            this.errorMessageCSVUpload = null;
+        },
+
+        closeAlertDemoFile() {
+            this.errorMessageDemoFile = null;
         }
 
     },
@@ -143,6 +153,10 @@ export var home = {
                 <div class="col">
                     <input type="file" accept=".csv" multiple="false" @change="handleFileUpload" />
                 </div>
+              </div>
+              <div v-if="errorMessageCSVUpload" class="alert alert-danger mt-3 d-flex justify-content-start" style="width: 50%;" role="alert">
+                {{ errorMessageCSVUpload }}
+                <button type="button" class="btn-close me-3" @click="closeAlertCSV" aria-label="Close"></button>
               </div>
               <div class="row">
                 <div class="col" style="margin-top: 30px;">
@@ -174,6 +188,10 @@ export var home = {
                 </div>
                 <div class="col" style="margin-top: 20px;">
                 </div>
+              </div>
+              <div v-if="errorMessageDemoFile" class="alert alert-danger mt-3 d-flex justify-content-start" style="width: 50%;" role="alert">
+                {{ errorMessageDemoFile }}
+                <button type="button" class="btn-close me-3" @click="closeAlertDemoFile" aria-label="Close"></button>
               </div>
               <div class="row">
                 <div class="col" style="margin-top: 30px;">
