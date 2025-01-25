@@ -40,11 +40,16 @@ def get_demo_files():
 def read_demo_file():
     demo_directory = './demo_files'
     file_name = request.args.get('file')
-    file_path = os.path.join(demo_directory, file_name)
-    df = pd.read_csv(file_path)
-    if df.shape[0] != 1:
-        return jsonify({"error": "There is an issue with the chosen property file. Please try another one."}), 400
-    else:
+    try:
+        file_path = os.path.join(demo_directory, file_name)
+        df = pd.read_csv(file_path)
+        if df.shape[0] != 1:
+            raise ValueError("There is an issue with the chosen property file. Please try another one.")
         df = df.fillna('N/A')
         subject_prop_dict = df.iloc[0].to_dict()
         return jsonify(subject_prop_dict), 200
+    except ValueError as ve:
+        return jsonify({'error': str(ve)}), 400
+    except Exception as e:
+        return jsonify({'error': f'An unexpected error occurred: {str(e)}'}), 500
+

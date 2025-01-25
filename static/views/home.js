@@ -69,7 +69,6 @@ export var home = {
                     ...response.data
                 };
             }).catch(error => {
-                console.log(error.response.data.error);
                 this.errorMessageCSVUpload = error.response.data.error;
             })
 
@@ -118,7 +117,7 @@ export var home = {
                 };
                 this.demoFileNameDisplayed = this.subjectPropertyData['Address'];
             }).catch(error => {
-                console.log(error);
+                this.errorMessageDemoFile = error.response.data.error;
             })
         },
 
