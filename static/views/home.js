@@ -33,7 +33,7 @@ export var home = {
     data() {
         return {
             analysisParams: {
-                rental_income: 2000,
+                rental_income: 3000,
                 percent_down: 25,
                 rehab_budget: 10000,
                 interest_rate: 6,
