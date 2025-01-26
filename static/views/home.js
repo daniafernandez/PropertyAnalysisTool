@@ -8,7 +8,7 @@ export var home = {
 
     watch: {
         analysisParams(dict) {
-            if (Object.keys(dict).length > 2) {
+            if (Object.keys(dict).length > 6) {
                 this.disabled = null;
             }
             else {
@@ -33,7 +33,7 @@ export var home = {
     data() {
         return {
             analysisParams: {
-                rental_income: 2000,
+                rental_income: 3000,
                 percent_down: 25,
                 rehab_budget: 10000,
                 interest_rate: 6,
@@ -47,12 +47,14 @@ export var home = {
             disabled: true,
             errorMessageCSVUpload: null,
             errorMessageDemoFile: null,
+            errorMessageBuildDash: null,
         };
     },
 
     methods: {
 
         handleFileUpload(event) {
+            this.subjectPropertyData = {};
             axios({
                 method: "post",
                 url: "/uploadFile",
@@ -69,6 +71,14 @@ export var home = {
                     ...response.data
                 };
             }).catch(error => {
+                this.analysisParams = {
+                rental_income: 2000,
+                percent_down: 25,
+                rehab_budget: 10000,
+                interest_rate: 6,
+                vacancy_rate: 5,
+                capex_percent: 7,
+                };
                 this.errorMessageCSVUpload = error.response.data.error;
             })
 
@@ -88,6 +98,7 @@ export var home = {
                 this.analysisDetails = response.data;
             }).catch(error => {
                 console.log(error);
+                this.errorMessageBuildDash = error.response.data.error;
             })
 
         },
@@ -98,8 +109,20 @@ export var home = {
 
         },
 
+        clearDash() {
+            this.analysisParams = {rental_income: 2000,
+                percent_down: 25,
+                rehab_budget: 10000,
+                interest_rate: 6,
+                vacancy_rate: 5,
+                capex_percent: 7,
+                };
+            this.analysisDetails = {};
+            this.demoFileNameDisplayed = 'No File chosen';
+        },
+
         selectDemoFile(file) {
-            console.log(file);
+            this.subjectPropertyData = {};
             axios({
                 method: "get",
                 url: "/readDemoFile",
@@ -117,6 +140,14 @@ export var home = {
                 };
                 this.demoFileNameDisplayed = this.subjectPropertyData['Address'];
             }).catch(error => {
+                this.analysisParams = {
+                rental_income: 2000,
+                percent_down: 25,
+                rehab_budget: 10000,
+                interest_rate: 6,
+                vacancy_rate: 5,
+                capex_percent: 7,
+                };
                 this.errorMessageDemoFile = error.response.data.error;
             })
         },
@@ -127,6 +158,10 @@ export var home = {
 
         closeAlertDemoFile() {
             this.errorMessageDemoFile = null;
+        },
+
+        closeAlertDash() {
+            this.errorMessageBuildDash = null;
         }
 
     },
@@ -167,7 +202,7 @@ export var home = {
               <div class="row">
                 <div class="col" style="margin-top: 20px;">
                     <div class="dropdown">
-                      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                      <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                         Choose property file
                       </button>
                       <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
@@ -198,11 +233,16 @@ export var home = {
                     <button style="font-size: 20px;" type="button" :disabled="this.disabled" @click="analyzeProperty" class="btn btn-primary">Build Dashboard</button>
                 </div>
               </div>
+              <div v-if="errorMessageBuildDash" class="alert alert-danger mt-3 d-flex justify-content-start" style="width: 50%;" role="alert">
+                {{ errorMessageBuildDash }}
+                <button type="button" class="btn-close me-3" @click="closeAlertDash" aria-label="Close"></button>
+              </div>
             </div>
             <dashboard v-if="Object.keys(analysisDetails).length > 0"
                 :analysisParams="analysisParams"
                 :analysisDetails="analysisDetails"
-                @update-calc="updateCalc"></dashboard>
+                @update-calc="updateCalc"
+                @clear-dash="clearDash"></dashboard>
         </div>
     `
 }

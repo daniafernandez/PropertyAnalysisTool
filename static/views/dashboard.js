@@ -189,13 +189,22 @@ export var dashboard = {
               },
             },
           });
-        }
+        },
 
             },
 
     template: `
         <div>
             <div class="container" style="background-color: #bbd0ff; padding: 30px; border-radius: 15px;">
+            <div class="row">
+                <div class="col">
+                    <button type="button" class="btn btn-secondary" @click="this.$emit('clear-dash')">Try Another Property</button>
+                </div>
+                <div class="col">
+                </div>
+                <div class="col">
+                </div>
+            </div>
               <div class="row">
                 <div class="col" style="padding: 30px; text-align: center;">
                     <h1>{{ analysisDetails["address_title"] }}</h1>
@@ -292,13 +301,6 @@ export var dashboard = {
                         max='100000'
                         step='100'></range_slider>
                     <div>
-                        <h6>Vacancy Reserves: {{ this.analysisDetails['vacancy_reserve'] }}</h6>
-                        <h6>CapEx: {{ this.analysisDetails['capex'] }}</h6>
-                        <h6>Taxes: {{ this.analysisDetails['tax_monthly'] }}</h6>
-                        <h6>Insurance: {{ this.analysisDetails['insurance'] }}</h6>
-                        <h6>Utilities: {{ this.analysisDetails['utilities'] }}</h6>
-                        <h6>HOA: {{ this.analysisDetails['HOA'] }}</h6>
-
                     </div>
                 </div>
               </div>
