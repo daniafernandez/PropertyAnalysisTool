@@ -109,6 +109,18 @@ export var home = {
 
         },
 
+        clearDash() {
+            this.analysisParams = {rental_income: 2000,
+                percent_down: 25,
+                rehab_budget: 10000,
+                interest_rate: 6,
+                vacancy_rate: 5,
+                capex_percent: 7,
+                };
+            this.analysisDetails = {};
+            this.demoFileNameDisplayed = 'No File chosen';
+        },
+
         selectDemoFile(file) {
             this.subjectPropertyData = {};
             axios({
@@ -190,7 +202,7 @@ export var home = {
               <div class="row">
                 <div class="col" style="margin-top: 20px;">
                     <div class="dropdown">
-                      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                      <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                         Choose property file
                       </button>
                       <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
@@ -229,7 +241,8 @@ export var home = {
             <dashboard v-if="Object.keys(analysisDetails).length > 0"
                 :analysisParams="analysisParams"
                 :analysisDetails="analysisDetails"
-                @update-calc="updateCalc"></dashboard>
+                @update-calc="updateCalc"
+                @clear-dash="clearDash"></dashboard>
         </div>
     `
 }

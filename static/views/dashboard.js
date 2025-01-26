@@ -189,13 +189,22 @@ export var dashboard = {
               },
             },
           });
-        }
+        },
 
             },
 
     template: `
         <div>
             <div class="container" style="background-color: #bbd0ff; padding: 30px; border-radius: 15px;">
+            <div class="row">
+                <div class="col">
+                    <button type="button" class="btn btn-secondary" @click="this.$emit('clear-dash')">Try Another Property</button>
+                </div>
+                <div class="col">
+                </div>
+                <div class="col">
+                </div>
+            </div>
               <div class="row">
                 <div class="col" style="padding: 30px; text-align: center;">
                     <h1>{{ analysisDetails["address_title"] }}</h1>
