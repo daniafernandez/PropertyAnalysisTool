@@ -292,13 +292,6 @@ export var dashboard = {
                         max='100000'
                         step='100'></range_slider>
                     <div>
-                        <h6>Vacancy Reserves: {{ this.analysisDetails['vacancy_reserve'] }}</h6>
-                        <h6>CapEx: {{ this.analysisDetails['capex'] }}</h6>
-                        <h6>Taxes: {{ this.analysisDetails['tax_monthly'] }}</h6>
-                        <h6>Insurance: {{ this.analysisDetails['insurance'] }}</h6>
-                        <h6>Utilities: {{ this.analysisDetails['utilities'] }}</h6>
-                        <h6>HOA: {{ this.analysisDetails['HOA'] }}</h6>
-
                     </div>
                 </div>
               </div>
