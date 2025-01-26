@@ -8,7 +8,7 @@ export var home = {
 
     watch: {
         analysisParams(dict) {
-            if (Object.keys(dict).length > 2) {
+            if (Object.keys(dict).length > 6) {
                 this.disabled = null;
             }
             else {
@@ -53,6 +53,7 @@ export var home = {
     methods: {
 
         handleFileUpload(event) {
+            this.subjectPropertyData = {};
             axios({
                 method: "post",
                 url: "/uploadFile",
@@ -69,6 +70,14 @@ export var home = {
                     ...response.data
                 };
             }).catch(error => {
+                this.analysisParams = {
+                rental_income: 2000,
+                percent_down: 25,
+                rehab_budget: 10000,
+                interest_rate: 6,
+                vacancy_rate: 5,
+                capex_percent: 7,
+                };
                 this.errorMessageCSVUpload = error.response.data.error;
             })
 
@@ -99,7 +108,7 @@ export var home = {
         },
 
         selectDemoFile(file) {
-            console.log(file);
+            this.subjectPropertyData = {};
             axios({
                 method: "get",
                 url: "/readDemoFile",
@@ -117,6 +126,14 @@ export var home = {
                 };
                 this.demoFileNameDisplayed = this.subjectPropertyData['Address'];
             }).catch(error => {
+                this.analysisParams = {
+                rental_income: 2000,
+                percent_down: 25,
+                rehab_budget: 10000,
+                interest_rate: 6,
+                vacancy_rate: 5,
+                capex_percent: 7,
+                };
                 this.errorMessageDemoFile = error.response.data.error;
             })
         },
