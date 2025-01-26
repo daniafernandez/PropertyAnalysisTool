@@ -47,6 +47,7 @@ export var home = {
             disabled: true,
             errorMessageCSVUpload: null,
             errorMessageDemoFile: null,
+            errorMessageBuildDash: null,
         };
     },
 
@@ -97,6 +98,7 @@ export var home = {
                 this.analysisDetails = response.data;
             }).catch(error => {
                 console.log(error);
+                this.errorMessageBuildDash = error.response.data.error;
             })
 
         },
@@ -144,6 +146,10 @@ export var home = {
 
         closeAlertDemoFile() {
             this.errorMessageDemoFile = null;
+        },
+
+        closeAlertDash() {
+            this.errorMessageBuildDash = null;
         }
 
     },
@@ -214,6 +220,10 @@ export var home = {
                 <div class="col" style="margin-top: 30px;">
                     <button style="font-size: 20px;" type="button" :disabled="this.disabled" @click="analyzeProperty" class="btn btn-primary">Build Dashboard</button>
                 </div>
+              </div>
+              <div v-if="errorMessageBuildDash" class="alert alert-danger mt-3 d-flex justify-content-start" style="width: 50%;" role="alert">
+                {{ errorMessageBuildDash }}
+                <button type="button" class="btn-close me-3" @click="closeAlertDash" aria-label="Close"></button>
               </div>
             </div>
             <dashboard v-if="Object.keys(analysisDetails).length > 0"
